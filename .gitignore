@@ -1,11 +1,11 @@
 venv/
+.vscode/
 __pycache__/
 *.pyc
 
 firmware/.pio/
 firmware/.vscode/
 
-.vscode/*
-!.vscode/settings.json
+calibration_images/**/*.png
 
 .DS_Store
