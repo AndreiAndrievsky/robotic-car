@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+
+firmware/.pio/
+firmware/.vscode/
+
+.vscode/*
+!.vscode/settings.json
+
+.DS_Store
