@@ -7,5 +7,6 @@ firmware/.pio/
 firmware/.vscode/
 
 calibration_images/**/*.png
+host/calibration/*.npy
 
 .DS_Store
