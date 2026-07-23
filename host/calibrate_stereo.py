@@ -5,18 +5,19 @@ import os
 from cv2 import aruco
 
 
-SQUARES_X   = 5
-SQUARES_Y   = 7
+SQUARES_X = 5
+SQUARES_Y = 7
 
 # initially the sizes were 35 and 20 mms. but the printer
 # stretched the squares when I printed the board on paper
 SQUARE_SIZE = 0.0372
 MARKER_SIZE = 0.0212
 
-DICTIONARY  = aruco.DICT_6X6_50
+DICTIONARY = aruco.DICT_6X6_50
 
-LEFT_IMAGES  = '../calibration_images/left/*.png'
-RIGHT_IMAGES = '../calibration_images/right/*.png'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LEFT_IMAGES = os.path.join(BASE_DIR, '../calibration_images/left/*.png')
+RIGHT_IMAGES = os.path.join(BASE_DIR, '../calibration_images/right/*.png')
 
 
 dictionary = aruco.getPredefinedDictionary(DICTIONARY)
@@ -31,18 +32,18 @@ detector = aruco.CharucoDetector(board)
 
 def detect_corners(image_paths, label):
     # detect charuco corners, return per-file results keyed by filename
-    files  = sorted(glob.glob(image_paths))
+    files = sorted(glob.glob(image_paths))
     result = {}  # filename : (obj_pts, img_pts, image_size)
 
     print(f"\n{label} camera: processing {len(files)} images")
 
     for fname in files:
-        img  = cv2.imread(fname)
+        img = cv2.imread(fname)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         charuco_corners, charuco_ids, _, _ = detector.detectBoard(gray)
 
         n = len(charuco_ids) if charuco_ids is not None else 0
-        print(f"  {os.path.basename(fname)}: {n} corners", end=" ")
+        print(f"{os.path.basename(fname)}: {n} corners", end=" ")
 
         if charuco_ids is not None and len(charuco_ids) > 5:
             obj_pts, img_pts = board.matchImagePoints(charuco_corners, charuco_ids)
@@ -55,13 +56,13 @@ def detect_corners(image_paths, label):
     return result
 
 
-results_l = detect_corners(LEFT_IMAGES,  "left")
+results_l = detect_corners(LEFT_IMAGES, "left")
 results_r = detect_corners(RIGHT_IMAGES, "right")
 
 print("\nfinding synchronized pairs with matching corner IDs")
 stereo_obj = []
-stereo_l   = []
-stereo_r   = []
+stereo_l = []
+stereo_r = []
 image_size = None
 valid_count = 0
 
@@ -84,7 +85,7 @@ for fname in common:
 
     img_l_filtered = img_l[mask_l]
     img_r_filtered = img_r[mask_r]
-    obj_filtered   = obj_l[mask_l]  # obj points are same for both
+    obj_filtered = obj_l[mask_l]  # obj points are same for both
 
     stereo_obj.append(obj_filtered)
     stereo_l.append(img_l_filtered)
