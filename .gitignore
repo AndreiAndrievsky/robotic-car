@@ -1,11 +1,13 @@
-venv/
+.venv/
 .vscode/
 __pycache__/
 *.pyc
+.env
 
 firmware/.pio/
 firmware/.vscode/
 
+*.service
 calibration_images/**/*.png
 host/calibration/*.npy
 
